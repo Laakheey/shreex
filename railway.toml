@@ -1,0 +1,9 @@
+# railway.toml (in repo root, not inside server/)
+[build]
+  builder = "NIXPACKS"
+  
+[build.nixpacksConfig]
+  buildCommand = "cd server && npm install && npm run build"
+
+[deploy]
+  startCommand = "cd server && npm start"
