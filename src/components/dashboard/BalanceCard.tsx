@@ -53,7 +53,7 @@ const BalanceCard: React.FC<BalanceCardProps> = ({ balance, isLoaded }) => {
           </h1>
 
           <p className="text-xl md:text-2xl text-gray-300 mb-10">
-            Your Exclusive Ram Token Portfolio
+            Your Exclusive ShreeX Token Portfolio
           </p>
 
           <div className="inline-block relative">

@@ -1,130 +1,42 @@
-// import { Copy } from "lucide-react";
-// import { QRCodeSVG } from "qrcode.react";
-// import { Toaster } from "react-hot-toast";
-// import { usePaymentFlowTest } from "../../hooks/usePaymentFlowTest";
-
-// interface BuyTokensCardTestProps {
-//   onBuySuccess?: () => void;
-// }
-
-// const BuyTokensCardTest: React.FC<BuyTokensCardTestProps> = ({
-//   onBuySuccess,
-// }) => {
-//   const {
-//     amount,
-//     setAmount,
-//     requestId,
-//     adminAddress,
-//     txHash,
-//     setTxHash,
-//     loading,
-//     verifying,
-//     initiatePayment,
-//     verifyPayment,
-//     copyAddress,
-//     reset,
-//   } = usePaymentFlowTest();
-
-//   const handleVerify = async () => {
-//     const success = await verifyPayment();
-//     if (success && onBuySuccess) {
-//       onBuySuccess();
-//     }
-//   };
-
-//   return (
-//     <div className="bg-white rounded-3xl shadow-2xl p-8 max-w-lg mx-auto my-10">
-//       <Toaster position="bottom-center" />
-//       <h2 className="text-3xl font-bold text-center mb-8 bg-linear-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-//         Buy Tokens (TRX or USDT)
-//       </h2>
-
-//       {!requestId ? (
-//         <>
-//           <input
-//             type="number"
-//             value={amount}
-//             onChange={(e) => setAmount(e.target.value)}
-//             placeholder="Suggested amount (optional)"
-//             className="w-full px-6 py-4 text-xl border-2 border-gray-300 rounded-2xl mb-6"
-//           />
-//           <button
-//             onClick={initiatePayment}
-//             disabled={loading}
-//             className="w-full py-6 bg-linear-to-r from-indigo-600 to-purple-600 text-white font-bold rounded-2xl"
-//           >
-//             {loading ? "Loading..." : "Continue"}
-//           </button>
-//         </>
-//       ) : (
-//         <div className="space-y-8 text-center">
-//           <div className="bg-linear-to-br from-indigo-50 to-purple-50 rounded-3xl p-8">
-//             <p className="text-2xl font-bold mb-6">Send to this address:</p>
-//             <QRCodeSVG
-//               value={adminAddress}
-//               size={240}
-//               className="mx-auto mb-8"
-//             />
-//             <div className="bg-gray-100 p-4 rounded-xl font-mono text-sm break-all mb-6">
-//               {adminAddress}
-//             </div>
-//             <button
-//               onClick={copyAddress}
-//               className="w-full py-4 bg-indigo-600 text-white rounded-2xl flex items-center justify-center gap-3"
-//             >
-//               <Copy className="h-5 w-5" /> Copy Address
-//             </button>
-
-//             <div className="mt-10 pt-8 border-t">
-//               <p className="text-lg font-semibold mb-4">
-//                 Paste transaction hash after sending:
-//               </p>
-//               <input
-//                 type="text"
-//                 value={txHash}
-//                 onChange={(e) => setTxHash(e.target.value)}
-//                 placeholder="64-character hash"
-//                 className="w-full px-6 py-4 border-2 rounded-2xl mb-4"
-//               />
-//               <button
-//                 onClick={handleVerify}
-//                 disabled={verifying || !txHash.trim()}
-//                 className="w-full py-6 bg-green-600 text-white font-bold rounded-2xl"
-//               >
-//                 {verifying ? "Verifying..." : "Verify & Get Tokens"}
-//               </button>
-//             </div>
-//           </div>
-//           <button onClick={reset} className="text-gray-500 underline">
-//             Cancel
-//           </button>
-//         </div>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default BuyTokensCardTest;
-
 import React from "react";
-import { Copy, CheckCircle2, AlertTriangle, Clock, Calendar, Star, ArrowLeft } from "lucide-react";
+import {
+  Copy,
+  CheckCircle2,
+  AlertTriangle,
+  Clock,
+  Calendar,
+  Star,
+  ArrowLeft,
+} from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
 import toast, { Toaster } from "react-hot-toast";
-import { usePaymentFlowTest, type InvestmentPlan } from "../../hooks/usePaymentFlowTest";
+import {
+  usePaymentFlowTest,
+  type InvestmentPlan,
+} from "../../hooks/usePaymentFlowTest";
 
 interface BuyTokensCardTestProps {
   onBuySuccess?: () => void;
 }
 
-const BuyTokensCardTest: React.FC<BuyTokensCardTestProps> = ({ onBuySuccess }) => {
+const BuyTokensCardTest: React.FC<BuyTokensCardTestProps> = ({
+  onBuySuccess,
+}) => {
   const {
-    amount, setAmount,
-    plan, setPlan,
-    requestId, adminAddress,
-    txHash, setTxHash,
-    loading, verifying,
-    initiatePayment, verifyPayment,
-    copyAddress, reset,
+    amount,
+    setAmount,
+    plan,
+    setPlan,
+    requestId,
+    adminAddress,
+    txHash,
+    setTxHash,
+    loading,
+    verifying,
+    initiatePayment,
+    verifyPayment,
+    copyAddress,
+    reset,
   } = usePaymentFlowTest();
 
   const handleVerify = async () => {
@@ -135,9 +47,19 @@ const BuyTokensCardTest: React.FC<BuyTokensCardTestProps> = ({ onBuySuccess }) =
     }
   };
 
-  const planOptions: { id: InvestmentPlan; label: string; icon: any; roi: string }[] = [
+  const planOptions: {
+    id: InvestmentPlan;
+    label: string;
+    icon: any;
+    roi: string;
+  }[] = [
     { id: "monthly", label: "Monthly", icon: Clock, roi: "10%/mo" },
-    { id: "half-yearly", label: "6 Months", icon: Calendar, roi: "1.75x Total" },
+    {
+      id: "half-yearly",
+      label: "6 Months",
+      icon: Calendar,
+      roi: "1.75x Total",
+    },
     { id: "yearly", label: "Yearly", icon: Star, roi: "3x Total" },
   ];
 
@@ -157,7 +79,9 @@ const BuyTokensCardTest: React.FC<BuyTokensCardTestProps> = ({ onBuySuccess }) =
       {!requestId ? (
         <div className="space-y-6">
           <div>
-            <label className="block text-sm font-bold text-gray-700 mb-2">Investment Amount</label>
+            <label className="block text-sm font-bold text-gray-700 mb-2">
+              Investment Amount
+            </label>
             <div className="relative">
               <input
                 type="number"
@@ -167,13 +91,19 @@ const BuyTokensCardTest: React.FC<BuyTokensCardTestProps> = ({ onBuySuccess }) =
                 placeholder="Min. 10 USDT"
                 className="w-full px-5 py-4 text-2xl font-bold border-2 border-gray-100 rounded-2xl focus:border-indigo-500 focus:ring-4 focus:ring-indigo-50 outline-none transition-all placeholder:text-gray-300"
               />
-              <span className="absolute right-5 top-1/2 -translate-y-1/2 font-bold text-gray-400">USDT</span>
+              <span className="absolute right-5 top-1/2 -translate-y-1/2 font-bold text-gray-400">
+                USDT
+              </span>
             </div>
-            <p className="mt-2 text-xs text-gray-500">Minimum deposit requirement: 10 USDT</p>
+            <p className="mt-2 text-xs text-gray-500">
+              Minimum deposit requirement: 10 USDT
+            </p>
           </div>
 
           <div>
-            <label className="block text-sm font-bold text-gray-700 mb-3">Choose Your Multiplier</label>
+            <label className="block text-sm font-bold text-gray-700 mb-3">
+              Choose Your Multiplier
+            </label>
             <div className="grid grid-cols-3 gap-3">
               {planOptions.map((option) => (
                 <button
@@ -185,9 +115,17 @@ const BuyTokensCardTest: React.FC<BuyTokensCardTestProps> = ({ onBuySuccess }) =
                       : "border-gray-50 bg-gray-50/50 text-gray-400 hover:border-gray-200"
                   }`}
                 >
-                  <option.icon className={`h-5 w-5 mb-2 ${plan === option.id ? "text-indigo-600" : "text-gray-400"}`} />
-                  <span className="text-xs font-bold whitespace-nowrap">{option.label}</span>
-                  <span className="text-[10px] font-medium opacity-80 mt-1">{option.roi}</span>
+                  <option.icon
+                    className={`h-5 w-5 mb-2 ${
+                      plan === option.id ? "text-indigo-600" : "text-gray-400"
+                    }`}
+                  />
+                  <span className="text-xs font-bold whitespace-nowrap">
+                    {option.label}
+                  </span>
+                  <span className="text-[10px] font-medium opacity-80 mt-1">
+                    {option.roi}
+                  </span>
                 </button>
               ))}
             </div>
@@ -211,8 +149,13 @@ const BuyTokensCardTest: React.FC<BuyTokensCardTestProps> = ({ onBuySuccess }) =
 
             <div className="text-left space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-indigo-400 uppercase">Wallet Address (BEP20)</span>
-                <button onClick={copyAddress} className="text-indigo-600 text-xs font-bold flex items-center gap-1">
+                <span className="text-xs font-bold text-indigo-400 uppercase">
+                  Wallet Address (BEP20)
+                </span>
+                <button
+                  onClick={copyAddress}
+                  className="text-indigo-600 text-xs font-bold flex items-center gap-1"
+                >
                   <Copy className="h-3 w-3" /> Copy
                 </button>
               </div>
@@ -226,13 +169,16 @@ const BuyTokensCardTest: React.FC<BuyTokensCardTestProps> = ({ onBuySuccess }) =
           <div className="flex items-start gap-3 p-4 bg-amber-50 rounded-2xl border border-amber-100">
             <AlertTriangle className="h-5 w-5 text-amber-600 shrink-0 mt-0.5" />
             <p className="text-xs text-amber-800 leading-relaxed">
-              <strong>Warning:</strong> Send only <strong>USDT via BSC (BEP20)</strong>. Sending via TRC20 or ERC20 will result in permanent loss of funds.
+              <strong>Warning:</strong> Send only{" "}
+              <strong>USDT via BSC (BEP20)</strong>. Sending via TRC20 or ERC20
+              will result in permanent loss of funds.
             </p>
           </div>
 
-          {/* TX Hash Submission */}
           <div className="pt-2">
-            <label className="block text-sm font-bold text-gray-700 mb-2">Paste Transaction Hash (TXID)</label>
+            <label className="block text-sm font-bold text-gray-700 mb-2">
+              Paste Transaction Hash (TXID)
+            </label>
             <input
               type="text"
               value={txHash}

@@ -94,7 +94,6 @@ const Dashboard: React.FC = () => {
 
         </div>
       </div>
-      {/* <CashOutCardTest currentBalance={balance} onSuccess={mutateBalance}/> */}
     </>
   );
 };

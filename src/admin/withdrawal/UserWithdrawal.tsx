@@ -25,7 +25,6 @@ const UserWithdrawal: React.FC = () => {
 
   const pending = withdrawals.filter((w) => w.status === "pending");
 
-  // Fix: Must return the Loading component
   if (loading) return <Loading />;
 
   return (
