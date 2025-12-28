@@ -2,7 +2,8 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/shreexco/public_html/
-    - /bin/rm -rf $DEPLOYPATH/*          # Clear old files
-    - /bin/rm -rf $DEPLOYPATH/.*         # Clear old hidden files (optional but safe)
-    - /bin/cp -rf dist/* $DEPLOYPATH/    # Copy all built files
-    - /bin/cp -rf dist/.* $DEPLOYPATH/   # Copy any hidden files from dist (e.g. .htaccess)
+    - /bin/rm -rf $DEPLOYPATH/* 
+    - /bin/rm -rf $DEPLOYPATH/.*
+    - /bin/cp -rf dist/ $DEPLOYPATH/   # ← Change * to / (copies the whole dist folder)
+    - /bin/mv $DEPLOYPATH/dist/* $DEPLOYPATH/   # Move contents up one level
+    - /bin/rm -rf $DEPLOYPATH/dist   # Clean up the empty dist folder
