@@ -1,0 +1,6 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/shreexco/public_html/
+    - /bin/cp -rf . $DEPLOYPATH
+    - /bin/rm -rf $DEPLOYPATH/.git*
