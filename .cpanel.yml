@@ -2,9 +2,6 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/shreexco/public_html/
-    - /bin/rm -rf $DEPLOYPATH/* 
-    - /bin/rm -rf $DEPLOYPATH/.*
-    - /bin/cp -rf dist $DEPLOYPATH/              # Copy the entire dist folder
-    - /bin/mv $DEPLOYPATH/dist/* $DEPLOYPATH/   # Move everything up one level
-    - /bin/mv $DEPLOYPATH/dist/.* $DEPLOYPATH/  # Move hidden files too (if any)
-    - /bin/rm -rf $DEPLOYPATH/dist              # Delete the now-empty dist folder
+    - /bin/rm -rf $DEPLOYPATH/*
+    - /bin/cp -R dist/* $DEPLOYPATH/
+    - echo "Deployment complete! Files copied to $DEPLOYPATH"
