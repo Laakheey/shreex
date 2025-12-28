@@ -1,7 +1,20 @@
 ---
 deployment:
   tasks:
+    # 1. Set the destination folder
     - export DEPLOYPATH=/home/shreexco/public_html/
+
+    # 2. Clean old files (safe & recommended)
     - /bin/rm -rf $DEPLOYPATH/*
+
+    # 3. Install dependencies (important!)
+    - npm ci
+
+    # 4. Build the Vite/React app → this creates fresh dist/ with .htaccess inside
+    - npm run build
+
+    # 5. Copy the built files to public_html
     - /bin/cp -R dist/* $DEPLOYPATH/
-    - echo "Deployment complete! Files copied to $DEPLOYPATH"
+
+    # 6. Confirm success (you’ll see this in deployment log)
+    - echo "Deployment complete! shreex.com is now live with latest build."
