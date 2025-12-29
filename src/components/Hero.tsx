@@ -1,6 +1,13 @@
+import { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 
 const HeroSection: React.FC = () => {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.playbackRate = 0.5;
+    }
+  }, []);
   return (
     <section className="relative min-h-screen flex items-center bg-[#020617] text-white overflow-hidden">
       <div className="absolute inset-0 z-0">
@@ -29,13 +36,11 @@ const HeroSection: React.FC = () => {
               <span className="text-white font-semibold underline decoration-yellow-500/50">
                 10% monthly
               </span>{" "}
-              returns, 
-              get {" "}
+              returns, get{" "}
               <span className="text-white font-semibold underline decoration-yellow-500/50">
                 1.75x your investment
-              </span>
-              {" "} in 6 months
-               or get{" "}
+              </span>{" "}
+              in 6 months or get{" "}
               <span className="text-white font-semibold underline decoration-yellow-500/50">
                 3x your investment
               </span>{" "}
@@ -90,6 +95,7 @@ const HeroSection: React.FC = () => {
             <div className="absolute -inset-4 bg-indigo-500/20 blur-3xl rounded-full"></div>
             <div className="relative rounded-3xl overflow-hidden border border-white/10 shadow-2xl">
               <video
+                ref={videoRef}
                 src="/assets/videos/homepage.mp4"
                 autoPlay
                 loop
