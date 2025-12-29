@@ -42,7 +42,7 @@ const MonthlyPlanCard: React.FC<MonthlyPlanCardProps> = ({
   };
 
   return (
-    <div className="bg-linear-to-br from-green-500 to-emerald-600 text-white rounded-3xl shadow-xl p-8 hover:shadow-2xl transition-all duration-300">
+    <div className="bg-linear-to-br from-[#CD7F32] to-[#8B4513] text-white rounded-3xl shadow-xl p-8 hover:shadow-2xl transition-all duration-300">
       <div className="flex justify-between items-start mb-6">
         <div>
           <h3 className="text-2xl font-bold">Monthly Growth</h3>

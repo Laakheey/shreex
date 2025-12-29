@@ -53,19 +53,19 @@ const ActiveInvestmentsCard: React.FC<ActiveInvestmentsCardProps> = ({
     switch (type) {
       case 'monthly':
         return { 
-          color: 'bg-green-600', 
+          color: 'bg-[#8B4513]', 
           label: 'Monthly (10%)', 
           sub: 'Monthly Payout' 
         };
       case 'half-yearly': // Corrected: This is the 6-month plan
         return { 
-          color: 'bg-purple-600', 
+          color: 'bg-[#d6d4d4]', 
           label: '6 Months (1.75x)', 
           sub: 'Fixed Term' 
         };
       case 'yearly': // Corrected: This is the 12-month plan
         return { 
-          color: 'bg-indigo-600', 
+          color: 'bg-[#fae502]', 
           label: 'Yearly (3x)', 
           sub: 'High Yield' 
         };

@@ -81,7 +81,7 @@ const CashOutCardTest: React.FC<CashOutCardProps> = ({ currentBalance, onSuccess
           type="text"
           value={walletAddress}
           onChange={(e) => setWalletAddress(e.target.value)}
-          placeholder="Tron address (starts with T)"
+          placeholder="USDT (TRC20)"
           className="w-full px-6 py-4 border-2 border-gray-300 rounded-2xl mb-6 focus:border-red-500 outline-none transition-all"
         />
       ) : (

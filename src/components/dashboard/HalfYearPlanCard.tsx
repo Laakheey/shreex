@@ -38,22 +38,22 @@ const HalfYearPlanCard: React.FC<PlanCardProps> = ({
   };
 
   return (
-    <div className="bg-linear-to-br from-purple-600 to-indigo-700 text-white rounded-3xl shadow-xl p-8 relative overflow-hidden flex flex-col justify-between h-full hover:shadow-2xl transition-all duration-300">
-      <div className="absolute top-0 right-0 bg-yellow-400 text-purple-900 px-5 py-2 rounded-bl-2xl font-black text-sm">
+    <div className="bg-linear-to-br from-[#d6d4d4] to-[#d6d4d4] text-white rounded-3xl shadow-xl p-8 relative overflow-hidden flex flex-col justify-between h-full hover:shadow-2xl transition-all duration-300">
+      <div className="absolute top-0 right-0 bg-indigo-400 text--900 px-5 py-2 rounded-bl-2xl font-black text-sm">
         HIGH YIELD
       </div>
       <div>
         <div className="mb-6">
-          <h3 className="text-2xl font-bold">6-Month Growth</h3>
-          <p className="opacity-80">Fixed Term Strategy</p>
+          <h3 className="text-2xl font-bold text-indigo-800">6-Month Growth</h3>
+          <p className="opacity-80 text-indigo-800">Fixed Term Strategy</p>
         </div>
-        <div className="mb-8">
+        <div className="mb-8 text-indigo-800">
           <span className="text-6xl font-black">1.75x</span>
-          <p className="mt-2 opacity-70 italic text-sm">
+          <p className="mt-2 opacity-70 italic text-sm text-indigo-800">
             Returns on maturity
           </p>
         </div>
-        <div className="space-y-4">
+        <div className="space-y-4 text-indigo-800">
           <div className="flex justify-between text-sm mb-2 opacity-90">
             <span>Investment Amount</span>
             <span>Balance: {(currentBalance ?? 0).toLocaleString()}</span>
@@ -64,13 +64,13 @@ const HalfYearPlanCard: React.FC<PlanCardProps> = ({
               placeholder="Min. 10"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
-              className="w-full px-5 py-4 bg-white/10 border-2 border-white/20 rounded-2xl text-white outline-none focus:border-white/50 text-xl font-semibold"
+              className="w-full px-5 py-4 bg-white/10 border-2 border-white/20 rounded-2xl text-black outline-none focus:border-black/50 text-xl font-semibold"
             />
-            <button onClick={handleMax} className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold bg-white text-purple-700 px-2 py-1 rounded">
+            <button onClick={handleMax} className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold bg-white text-indigo-800 px-2 py-1 rounded">
               MAX
             </button>
           </div>
-          <p className="text-xs mt-2 text-green-100 opacity-70">
+          <p className="text-xs mt-2 opacity-70 text-indigo-800">
             Min investment: 10 USDT
           </p>
           <button
@@ -82,7 +82,7 @@ const HalfYearPlanCard: React.FC<PlanCardProps> = ({
           </button>
         </div>
       </div>
-      <p className="mt-6 text-center text-xs opacity-60 italic">
+      <p className="mt-6 text-center text-xs opacity-60 italic text-indigo-800">
         Locked for 180 days. Capital + Profit released at term end.
       </p>
     </div>

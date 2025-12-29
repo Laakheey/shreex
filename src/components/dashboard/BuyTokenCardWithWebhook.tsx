@@ -72,7 +72,7 @@ const BuyTokensCardTest: React.FC<BuyTokensCardTestProps> = ({
           Deposit <span className="text-indigo-600">USDT</span>
         </h2>
         <div className="inline-flex items-center px-3 py-1 rounded-full bg-yellow-100 text-yellow-700 text-xs font-bold uppercase tracking-widest">
-          Network: BSC (BEP20)
+          Network: TRC20
         </div>
       </div>
 
@@ -85,7 +85,7 @@ const BuyTokensCardTest: React.FC<BuyTokensCardTestProps> = ({
             <div className="relative">
               <input
                 type="number"
-                min="10"
+                min="1"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 placeholder="Min. 10 USDT"
@@ -150,7 +150,7 @@ const BuyTokensCardTest: React.FC<BuyTokensCardTestProps> = ({
             <div className="text-left space-y-3">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-indigo-400 uppercase">
-                  Wallet Address (BEP20)
+                  Wallet Address (TRC20)
                 </span>
                 <button
                   onClick={copyAddress}
@@ -170,8 +170,9 @@ const BuyTokensCardTest: React.FC<BuyTokensCardTestProps> = ({
             <AlertTriangle className="h-5 w-5 text-amber-600 shrink-0 mt-0.5" />
             <p className="text-xs text-amber-800 leading-relaxed">
               <strong>Warning:</strong> Send only{" "}
-              <strong>USDT via BSC (BEP20)</strong>. Sending via TRC20 or ERC20
-              will result in permanent loss of funds.
+              <strong>USDT (TRC20)</strong>. Send via TRC20 only. Or your
+              funds may be lost. Ensure the amount matches exactly:{" "}
+              <strong>{amount} USDT</strong>.
             </p>
           </div>
 

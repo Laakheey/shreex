@@ -9,6 +9,7 @@ import { useTokenBalance } from "../../hooks/useTokenBalance";
 import { useFetchInvestments } from "../../hooks/useFetchInvestment";
 import BuyTokensCardTest from "./BuyTokenCardWithWebhook";
 import CashOutCardTest from "./CashOutCardTest";
+import ReferralRules from "./ReferralRules";
 
 const ROIPage = lazy(() => import("../../components/userRoi/ROI"));
 const SupportPage = lazy(() => import("../supportAndGrowth/SupportAndGrowthHome"));
@@ -79,6 +80,8 @@ const Dashboard: React.FC = () => {
                     <YearlyPlanCard currentBalance={balance} mutate={mutateBalance} onInvestmentSuccess={mutateInvestments} />
                   </div>
                 </section>
+
+                <ReferralRules />
 
                 <ActiveInvestmentsCard
                   investments={investments}

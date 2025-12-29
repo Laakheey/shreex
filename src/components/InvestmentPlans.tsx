@@ -18,7 +18,7 @@ const InvestmentPlans: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
           {/* Monthly Growth Plan */}
           <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-200 hover:shadow-2xl transition">
-            <div className="bg-linear-to-r from-green-500 to-emerald-600 text-white p-8 text-center">
+            <div className="bg-linear-to-r from-[#CD7F32] to-[#8B4513] text-white p-8 text-center">
               <h3 className="text-2xl font-bold mb-2">Monthly Growth</h3>
               <div className="text-5xl font-extrabold">10%</div>
               <p className="text-lg mt-2 opacity-90">Per Month</p>

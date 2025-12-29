@@ -53,7 +53,7 @@ export const PayoutWalletsManager: React.FC<PayoutWalletsManagerProps> = ({ wall
             />
             <input
               type="text"
-              placeholder="Tron Address (starts with T)"
+              placeholder="USDT (TRC20)"
               value={address}
               onChange={(e) => setAddress(e.target.value)}
               className="px-4 py-3 border border-indigo-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
