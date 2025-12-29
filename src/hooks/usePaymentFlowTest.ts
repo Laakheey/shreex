@@ -9,7 +9,6 @@ export type InvestmentPlan = "monthly" | "half-yearly" | "yearly";
 export const usePaymentFlowTest = () => {
   const { getToken, isSignedIn } = useAuth();
   
-  // State Management
   const [amount, setAmount] = useState<string>("");
   const [plan, setPlan] = useState<InvestmentPlan>("monthly");
   const [requestId, setRequestId] = useState<number | null>(null);
@@ -24,7 +23,7 @@ export const usePaymentFlowTest = () => {
     }
 
     const numAmount = Number(amount);
-    if (!amount || numAmount < 1) {
+    if (!amount || numAmount < 10) {
       return toast.error("Minimum investment is 10 USDT");
     }
 
@@ -51,7 +50,6 @@ export const usePaymentFlowTest = () => {
         throw new Error(data.error || "Failed to initiate payment");
       }
 
-      // 3. Set Payment Details
       setRequestId(data.requestId);
       setAdminAddress(data.adminAddress);
       
@@ -124,7 +122,6 @@ export const usePaymentFlowTest = () => {
   };
 
   return {
-    // State
     amount,
     setAmount,
     plan,
@@ -135,7 +132,6 @@ export const usePaymentFlowTest = () => {
     setTxHash,
     loading,
     verifying,
-    // Actions
     initiatePayment,
     verifyPayment,
     copyAddress,

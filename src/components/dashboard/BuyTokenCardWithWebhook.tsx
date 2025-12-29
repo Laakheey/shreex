@@ -85,7 +85,7 @@ const BuyTokensCardTest: React.FC<BuyTokensCardTestProps> = ({
             <div className="relative">
               <input
                 type="number"
-                min="1"
+                min="10"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 placeholder="Min. 10 USDT"
