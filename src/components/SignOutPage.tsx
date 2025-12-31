@@ -11,7 +11,14 @@ const SignUpPage = () => {
       </SignedIn>
       <SignedOut>
         <div className="flex items-center justify-center min-h-screen">
-          <SignUp routing="path" path="/sign-up" signInUrl="/sign-in" />
+          <SignUp
+            routing="path"
+            path="/sign-up"
+            signInUrl="/sign-in"
+            unsafeMetadata={{
+              referral_code: localStorage.getItem("pending_referral_code"),
+            }}
+          />
         </div>
       </SignedOut>
     </>

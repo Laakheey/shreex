@@ -154,15 +154,12 @@ export const useAdminPanel = () => {
 
     try {
       const token = await getToken();
-      console.log(token);
 
       if (!token) {
         toast.error("Not authenticated");
         setLoading(false);
         return;
       }
-
-      console.log("📡 Fetching users page:", page);
 
       const response = await fetch(
         `${API_BASE_URL}/api/admin/users?page=${page}&pageSize=${PAGE_SIZE}`,
@@ -189,9 +186,6 @@ export const useAdminPanel = () => {
 
       const data = await response.json();
 
-      console.log("✅ Received:", data.users?.length, "users");
-
-      // Convert token_balance from string/numeric to number for display
       const usersWithParsedBalance = (data.users || []).map((user: any) => ({
         ...user,
         token_balance: Number(user.token_balance) || 0,
@@ -227,8 +221,6 @@ export const useAdminPanel = () => {
         return;
       }
 
-      console.log("💰 Updating balance for user:", userId, "to:", amount);
-
       const response = await fetch(
         `${API_BASE_URL}/api/admin/users/${userId}/balance`,
         {
@@ -250,8 +242,6 @@ export const useAdminPanel = () => {
       }
 
       const result = await response.json();
-
-      console.log("✅ Balance updated:", result);
 
       const diffText =
         result.difference >= 0
@@ -322,7 +312,7 @@ export const useAdminPanel = () => {
       );
       const data = await response.json();
       setUsers(data.users || []);
-      setTotalPages(1); // Search results usually don't need complex pagination initially
+      setTotalPages(1);
     } catch (error) {
       toast.error("Search failed");
     } finally {

@@ -48,7 +48,6 @@ const ActiveInvestmentsCard: React.FC<ActiveInvestmentsCardProps> = ({
     setWithdrawAmount("");
   };
 
-  // Helper to get Plan-specific UI details
   const getPlanDetails = (type: string) => {
     switch (type) {
       case 'monthly':
@@ -57,7 +56,7 @@ const ActiveInvestmentsCard: React.FC<ActiveInvestmentsCardProps> = ({
           label: 'Monthly (10%)', 
           sub: 'Monthly Payout' 
         };
-      case 'half-yearly': // Corrected: This is the 6-month plan
+      case 'half-yearly':
         return { 
           color: 'bg-[#d6d4d4]', 
           label: '6 Months (1.75x)', 
