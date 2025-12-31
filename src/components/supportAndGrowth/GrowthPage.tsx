@@ -3,10 +3,14 @@ import { useReferral } from "../../hooks/useReferralTest";
 import { Copy, Users, DollarSign, Lock, ArrowRight } from "lucide-react";
 import toast, { Toaster } from "react-hot-toast";
 import { useUser } from "@clerk/clerk-react";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import Loading from "../Loading";
 
-const GrowthPage: React.FC = () => {
+interface GrowthPageProps {
+  onNavigateToInvest: () => void;
+}
+
+const GrowthPage: React.FC<GrowthPageProps> = ({ onNavigateToInvest }) => {
   const {
     myReferralCode,
     downline,
@@ -18,7 +22,7 @@ const GrowthPage: React.FC = () => {
   } = useReferral();
 
   const { user, isLoaded } = useUser();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const referralLink = `${window.location.origin}/?ref=${myReferralCode}`;
 
   useEffect(() => {
@@ -56,7 +60,7 @@ const GrowthPage: React.FC = () => {
             to generate your referral link and earn commissions.
           </p>
           <button 
-            onClick={() => navigate("/invest")}
+            onClick={onNavigateToInvest}
             className="inline-flex items-center gap-2 bg-indigo-600 text-white px-8 py-4 rounded-2xl font-bold hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-200"
           >
             Get Started <ArrowRight size={20} />

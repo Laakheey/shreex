@@ -4,7 +4,11 @@ import { TrendingUp, LifeBuoy } from "lucide-react";
 const GrowthView = lazy(() => import("./GrowthPage"));
 const UserSupportChat = lazy(() => import("./SupportPage"));
 
-const SupportAndGrowthHome: React.FC = () => {
+interface SupportPageProps {
+  onNavigateToInvest: () => void;
+}
+
+const SupportAndGrowthHome: React.FC<SupportPageProps> = ({ onNavigateToInvest }) => {
   const [activeTab, setActiveTab] = useState<"growth" | "support">("growth");
 
   return (
@@ -69,7 +73,6 @@ const SupportAndGrowthHome: React.FC = () => {
         </button>
       </div>
 
-      {/* RIGHT SIDE: Content Area */}
       <div className="flex-1">
         <Suspense
           fallback={
@@ -78,7 +81,7 @@ const SupportAndGrowthHome: React.FC = () => {
             </div>
           }
         >
-          {activeTab === "growth" ? <GrowthView /> : <UserSupportChat />}
+          {activeTab === "growth" ? <GrowthView onNavigateToInvest={onNavigateToInvest} /> : <UserSupportChat />}
         </Suspense>
       </div>
     </div>

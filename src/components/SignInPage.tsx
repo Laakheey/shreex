@@ -7,7 +7,7 @@ const SignInPage = () => {
   return (
     <>
       <SignedIn>
-        <Navigate to="/dashboard" replace />  {/* or "/" */}
+        <Navigate to="/dashboard" replace />
       </SignedIn>
       <SignedOut>
         <div className="flex items-center justify-center min-h-screen">
