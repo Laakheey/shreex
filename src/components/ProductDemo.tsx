@@ -1,4 +1,4 @@
-import demo from '/assets/videos/demo.webm'
+import demo from '/assets/videos/hero.mp4'
 const ProductDemo: React.FC = () => {
   return (
     <section className="bg-white py-12 -mt-20 relative z-10">
