@@ -96,7 +96,7 @@ const HeroSection: React.FC = () => {
             <div className="relative rounded-3xl overflow-hidden border border-white/10 shadow-2xl">
               <video
                 ref={videoRef}
-                src="/assets/videos/homepage.mp4"
+                src="/assets/videos/home-page.mp4"
                 autoPlay
                 loop
                 muted
