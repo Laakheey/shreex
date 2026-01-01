@@ -10,6 +10,7 @@ import { useFetchInvestments } from "../../hooks/useFetchInvestment";
 import BuyTokensCardTest from "./BuyTokenCardWithWebhook";
 import CashOutCardTest from "./CashOutCardTest";
 import ReferralRules from "./ReferralRules";
+import GrowthPage from "../supportAndGrowth/GrowthPage";
 
 const ROIPage = lazy(() => import("../../components/userRoi/ROI"));
 const SupportPage = lazy(
@@ -104,6 +105,8 @@ const Dashboard: React.FC = () => {
                     />
                   </div>
                 </section>
+
+                <GrowthPage onNavigateToInvest={() => setActiveTab("invest")} />
 
                 <ReferralRules />
 
