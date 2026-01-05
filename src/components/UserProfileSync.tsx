@@ -71,171 +71,157 @@ const UserProfileSync: React.FC = () => {
     const syncUser = async () => {
       const email = user.primaryEmailAddress?.emailAddress;
       if (!email) {
-        console.log("Email not loaded yet, retrying...");
+        console.log("⏳ Email not loaded yet, retrying in 1 second...");
         setTimeout(syncUser, 1000);
         return;
       }
 
       try {
-        // 1. Check if user exists by email
-        const { data: existingUser } = await supabase
+        console.log(`🔍 Checking user: ${email} with Clerk ID: ${user.id}`);
+
+        // STEP 1: Check if this exact Clerk ID already exists
+        const { data: exactMatch } = await supabase
+          .from("users")
+          .select("*")
+          .eq("id", user.id)
+          .maybeSingle();
+
+        if (exactMatch) {
+          console.log("✅ User already exists with correct Clerk ID - updating names only");
+          await supabase
+            .from("users")
+            .update({
+              first_name: user.firstName || exactMatch.first_name,
+              last_name: user.lastName || exactMatch.last_name,
+              email: email, // Ensure email is set
+            })
+            .eq("id", user.id);
+          
+          hasRun.current = true;
+          return;
+        }
+
+        // STEP 2: Check if user exists by email (potential migration case)
+        const { data: emailMatch } = await supabase
           .from("users")
           .select("*")
           .eq("email", email)
           .maybeSingle();
 
-        if (existingUser) {
-          // Case A: Same Clerk ID - just update names
-          if (existingUser.id === user.id) {
-            await supabase
-              .from("users")
-              .update({
-                first_name: user.firstName || existingUser.first_name,
-                last_name: user.lastName || existingUser.last_name,
-              })
-              .eq("id", user.id);
-            console.log("✅ User already synced");
-          } 
-          // Case B: Different Clerk ID - MIGRATION NEEDED
-          else {
-            console.log(`🔄 MIGRATION START: ${existingUser.id} → ${user.id}`);
-            
-            const oldClerkId = existingUser.id;
-            const newClerkId = user.id;
+        if (emailMatch && emailMatch.id !== user.id) {
+          // MIGRATION CASE: User exists with different Clerk ID
+          console.log(`🔄 MIGRATION DETECTED!`);
+          console.log(`   Email: ${email}`);
+          console.log(`   Old Clerk ID: ${emailMatch.id}`);
+          console.log(`   New Clerk ID: ${user.id}`);
+          
+          const oldClerkId = emailMatch.id;
+          const newClerkId = user.id;
 
-            // STEP 1: Update all foreign key references
-            console.log("📝 Updating foreign keys...");
+          // STEP 3: Update all foreign key references
+          console.log("📝 Step 1/4: Updating foreign key references...");
 
-            // Update token_requests
-            const { error: tokenRequestsError } = await supabase
-              .from("token_requests")
-              .update({ user_id: newClerkId })
-              .eq("user_id", oldClerkId);
-            if (tokenRequestsError) console.error("❌ token_requests update failed:", tokenRequestsError);
-            else console.log("✅ token_requests updated");
+          const updatePromises = [
+            supabase.from("token_requests").update({ user_id: newClerkId }).eq("user_id", oldClerkId),
+            supabase.from("investments").update({ user_id: newClerkId }).eq("user_id", oldClerkId),
+            supabase.from("withdrawals").update({ user_id: newClerkId }).eq("user_id", oldClerkId),
+            supabase.from("user_monthly_performance").update({ user_id: newClerkId }).eq("user_id", oldClerkId),
+            supabase.from("referrals").update({ referrer_id: newClerkId }).eq("referrer_id", oldClerkId),
+            supabase.from("referrals").update({ referred_id: newClerkId }).eq("referred_id", oldClerkId),
+            supabase.from("referral_bonuses").update({ referrer_id: newClerkId }).eq("referrer_id", oldClerkId),
+            supabase.from("referral_bonuses").update({ referred_user_id: newClerkId }).eq("referred_user_id", oldClerkId),
+            supabase.from("users").update({ referrer_id: newClerkId }).eq("referrer_id", oldClerkId),
+          ];
 
-            // Update investments
-            const { error: investmentsError } = await supabase
-              .from("investments")
-              .update({ user_id: newClerkId })
-              .eq("user_id", oldClerkId);
-            if (investmentsError) console.error("❌ investments update failed:", investmentsError);
-            else console.log("✅ investments updated");
+          const results = await Promise.allSettled(updatePromises);
+          
+          const tableNames = [
+            "token_requests", "investments", "withdrawals", "user_monthly_performance",
+            "referrals (referrer)", "referrals (referred)", 
+            "referral_bonuses (referrer)", "referral_bonuses (referred)", "users (referrer)"
+          ];
 
-            // Update withdrawals
-            const { error: withdrawalsError } = await supabase
-              .from("withdrawals")
-              .update({ user_id: newClerkId })
-              .eq("user_id", oldClerkId);
-            if (withdrawalsError) console.error("❌ withdrawals update failed:", withdrawalsError);
-            else console.log("✅ withdrawals updated");
-
-            // Update user_monthly_performance
-            const { error: performanceError } = await supabase
-              .from("user_monthly_performance")
-              .update({ user_id: newClerkId })
-              .eq("user_id", oldClerkId);
-            if (performanceError) console.error("❌ user_monthly_performance update failed:", performanceError);
-            else console.log("✅ user_monthly_performance updated");
-
-            // Update referrals - referrer_id
-            const { error: referralsReferrerError } = await supabase
-              .from("referrals")
-              .update({ referrer_id: newClerkId })
-              .eq("referrer_id", oldClerkId);
-            if (referralsReferrerError) console.error("❌ referrals (referrer_id) update failed:", referralsReferrerError);
-            else console.log("✅ referrals (referrer_id) updated");
-
-            // Update referrals - referred_id
-            const { error: referralsReferredError } = await supabase
-              .from("referrals")
-              .update({ referred_id: newClerkId })
-              .eq("referred_id", oldClerkId);
-            if (referralsReferredError) console.error("❌ referrals (referred_id) update failed:", referralsReferredError);
-            else console.log("✅ referrals (referred_id) updated");
-
-            // Update referral_bonuses - referrer_id
-            const { error: bonusesReferrerError } = await supabase
-              .from("referral_bonuses")
-              .update({ referrer_id: newClerkId })
-              .eq("referrer_id", oldClerkId);
-            if (bonusesReferrerError) console.error("❌ referral_bonuses (referrer_id) update failed:", bonusesReferrerError);
-            else console.log("✅ referral_bonuses (referrer_id) updated");
-
-            // Update referral_bonuses - referred_user_id
-            const { error: bonusesReferredError } = await supabase
-              .from("referral_bonuses")
-              .update({ referred_user_id: newClerkId })
-              .eq("referred_user_id", oldClerkId);
-            if (bonusesReferredError) console.error("❌ referral_bonuses (referred_user_id) update failed:", bonusesReferredError);
-            else console.log("✅ referral_bonuses (referred_user_id) updated");
-
-            // Update users table - referrer_id (self-referencing)
-            const { error: usersReferrerError } = await supabase
-              .from("users")
-              .update({ referrer_id: newClerkId })
-              .eq("referrer_id", oldClerkId);
-            if (usersReferrerError) console.error("❌ users (referrer_id) update failed:", usersReferrerError);
-            else console.log("✅ users (referrer_id) updated");
-
-            console.log("✅ All foreign keys updated");
-
-            // STEP 2: Preserve old user data
-            const oldData = { ...existingUser };
-            delete oldData.idx; // Remove auto-increment ID if exists
-
-            // STEP 3: Delete old user record
-            const { error: deleteError } = await supabase
-              .from("users")
-              .delete()
-              .eq("id", oldClerkId);
-
-            if (deleteError) {
-              console.error("❌ Failed to delete old user:", deleteError);
-              throw deleteError;
+          results.forEach((result, index) => {
+            if (result.status === "fulfilled") {
+              console.log(`   ✅ ${tableNames[index]} updated`);
+            } else {
+              console.error(`   ❌ ${tableNames[index]} failed:`, result.reason);
             }
-            console.log("✅ Old user record deleted");
+          });
 
-            // STEP 4: Insert with new Clerk ID
-            const { error: insertError } = await supabase
-              .from("users")
-              .insert({
-                id: newClerkId,
-                email: oldData.email,
-                first_name: user.firstName || oldData.first_name,
-                last_name: user.lastName || oldData.last_name,
-                token_balance: oldData.token_balance,
-                referral_code: oldData.referral_code,
-                is_admin: oldData.is_admin,
-                referrer_id: oldData.referrer_id, // This will already be updated if it was the old ID
-                is_active: oldData.is_active,
-              });
+          // STEP 4: Preserve old user data
+          console.log("📝 Step 2/4: Preserving user data...");
+          const oldData = { ...emailMatch };
+          delete oldData.idx; // Remove auto-increment ID
 
-            if (insertError) {
-              console.error("❌ Migration failed:", insertError);
-              throw insertError;
-            }
+          // STEP 5: Delete old user record
+          console.log("📝 Step 3/4: Removing old Clerk ID record...");
+          const { error: deleteError } = await supabase
+            .from("users")
+            .delete()
+            .eq("id", oldClerkId);
 
-            console.log("✅✅✅ MIGRATION COMPLETE! All data preserved.");
-            console.log(`User ${email} migrated from ${oldClerkId} to ${newClerkId}`);
+          if (deleteError) {
+            console.error("❌ Failed to delete old user record:", deleteError);
+            throw deleteError;
           }
+          console.log("   ✅ Old record deleted");
+
+          // STEP 6: Insert with new Clerk ID
+          console.log("📝 Step 4/4: Creating new record with prod Clerk ID...");
+          const { error: insertError } = await supabase
+            .from("users")
+            .insert({
+              id: newClerkId,
+              email: email,
+              first_name: user.firstName || oldData.first_name,
+              last_name: user.lastName || oldData.last_name,
+              token_balance: oldData.token_balance,
+              referral_code: oldData.referral_code,
+              is_admin: oldData.is_admin,
+              referrer_id: oldData.referrer_id,
+              is_active: oldData.is_active,
+            });
+
+          if (insertError) {
+            console.error("❌ Migration failed at insert:", insertError);
+            throw insertError;
+          }
+
+          console.log("✅✅✅ MIGRATION COMPLETE!");
+          console.log(`   User: ${email}`);
+          console.log(`   Old ID: ${oldClerkId}`);
+          console.log(`   New ID: ${newClerkId}`);
+          console.log(`   Token Balance: ${oldData.token_balance}`);
+          console.log(`   Referral Code: ${oldData.referral_code}`);
+          console.log(`   Admin Status: ${oldData.is_admin}`);
+
         } else {
-          // Truly new user
-          await supabase.from("users").insert({
+          // STEP 7: Truly new user (no email match found)
+          console.log("🆕 Creating brand new user");
+          const { error: insertError } = await supabase.from("users").insert({
             id: user.id,
             email,
             first_name: user.firstName,
             last_name: user.lastName,
             token_balance: 0,
             referral_code: Math.random().toString(36).substring(2, 8).toUpperCase(),
+            is_admin: false,
+            is_active: true,
           });
-          console.log("✅ New user created");
+
+          if (insertError) {
+            console.error("❌ Failed to create new user:", insertError);
+            throw insertError;
+          }
+          console.log("✅ New user created successfully");
         }
 
         hasRun.current = true;
       } catch (error: any) {
-        console.error("❌ Sync failed:", error.message);
-        console.error("Full error:", error);
+        console.error("❌ SYNC FAILED:", error.message);
+        console.error("Full error details:", error);
+        // Don't set hasRun to true on error, allow retry on next render
       }
     };
 
