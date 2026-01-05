@@ -69,40 +69,36 @@ const UserProfileSync: React.FC = () => {
     if (!isLoaded || !user || !supabase || hasRun.current) return;
 
     const syncUser = async () => {
+      // Wait until email is definitely loaded (especially for Google sign-in)
       const email = user.primaryEmailAddress?.emailAddress;
       if (!email) {
-        console.log("No email found on Clerk user");
+        console.log("Email not loaded yet, retrying in 1 second...");
+        setTimeout(syncUser, 1000);  // Retry after 1 second
         return;
       }
 
       try {
-        // Look for existing user by email
-        const { data: existingUser, error: fetchError } = await supabase
+        const { data: existingUser } = await supabase
           .from("users")
           .select("*")
           .eq("email", email)
           .maybeSingle();
 
-        if (fetchError && fetchError.code !== "PGRST116") { // PGRST116 = no row
-          throw fetchError;
-        }
-
         if (existingUser) {
-          // Existing user from dev mode → update to new production Clerk ID
+          // MERGE: Update old row with new production Clerk ID
           const { error } = await supabase
             .from("users")
             .update({
-              id: user.id, // ← This is the key: changes old ID to new
+              id: user.id,
               first_name: user.firstName || existingUser.first_name,
               last_name: user.lastName || existingUser.last_name,
             })
             .eq("email", email);
 
           if (error) throw error;
-
-          console.log("Successfully merged user: old dev ID → new prod ID");
+          console.log("Merged! Old user updated to new Clerk ID:", user.id);
         } else {
-          // Truly new user → create fresh
+          // Truly new user
           const { error } = await supabase.from("users").insert({
             id: user.id,
             email,
@@ -111,15 +107,13 @@ const UserProfileSync: React.FC = () => {
             token_balance: 0,
             referral_code: Math.random().toString(36).substring(2, 8).toUpperCase(),
           });
-
           if (error) throw error;
-
-          console.log("Created new user in Supabase");
+          console.log("Created new user");
         }
 
         hasRun.current = true;
       } catch (error: any) {
-        console.error("User sync failed:", error.message);
+        console.error("Sync failed:", error.message);
       }
     };
 
