@@ -58,7 +58,14 @@ const UserProfileSync: React.FC = () => {
     syncUser();
   }, [user, isLoaded, supabase]);
 
-  // useEffect(() => {
+  return null;
+};
+
+export default UserProfileSync;
+
+
+
+// useEffect(() => {
   //   if (!isLoaded || !user || !supabase || hasRun.current) return;
 
   //   const syncUser = async () => {
@@ -102,10 +109,6 @@ const UserProfileSync: React.FC = () => {
   //   syncUser();
   // }, [user, isLoaded, supabase]);
 
-  return null;
-};
-
-export default UserProfileSync;
 
 // import { useEffect, useRef } from "react";
 // import { useUser } from "@clerk/clerk-react";
