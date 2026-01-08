@@ -78,7 +78,7 @@ export function useAdminStats() {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
-        credentials: "include", // Important for CORS
+        credentials: "include",
       });
 
       console.log("📡 Response status:", res.status);

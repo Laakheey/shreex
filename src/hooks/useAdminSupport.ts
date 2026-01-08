@@ -350,7 +350,6 @@ export const useAdminSupport = () => {
         const userInfo = users?.find((u: any) => u.id === userId);
         const lastMsg = msgs[0];
 
-        // Count only USER messages that haven't been read by admin
         const unreadCount = msgs.filter(
           (m) => !m.is_admin_reply && !m.read_by_admin_at
         ).length;
@@ -388,7 +387,7 @@ export const useAdminSupport = () => {
       .update({ read_by_admin_at: new Date().toISOString() })
       .eq("user_id", userId)
       .is("read_by_admin_at", null)
-      .neq("is_admin_reply", true); // Only mark user messages as read
+      .neq("is_admin_reply", true);
   };
 
   const fetchMessages = async (userId: string) => {
@@ -407,11 +406,9 @@ export const useAdminSupport = () => {
 
       setMessages(data || []);
 
-      // Mark as read when admin opens the chat
       const hasUnread = data?.some((m: any) => !m.is_admin_reply && !m.read_by_admin_at);
       if (hasUnread) {
         await markMessagesAsRead(userId);
-        // Refresh the sidebar unread counts
         fetchUserChats();
       }
     } catch (err) {
@@ -446,15 +443,13 @@ export const useAdminSupport = () => {
       if (isMountedRef.current) {
         setMessages((prev) => [...prev, newMsg]);
         toast.success("Reply sent!");
-        fetchUserChats(); // Update last message + clear unread if needed
+        fetchUserChats();
       }
     } catch (err) {
       console.error("Error sending reply:", err);
       toast.error("Failed to send reply");
     }
   };
-
-  // uploadImage remains the same...
 
   useEffect(() => {
     isMountedRef.current = true;
