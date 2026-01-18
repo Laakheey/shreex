@@ -73,7 +73,6 @@ export const encryptPrivateKey = async (text: string): Promise<string> => {
   return `${bufferToHex(salt.buffer)}:${bufferToHex(iv.buffer as ArrayBuffer)}:${bufferToHex(ciphertext.buffer)}:${bufferToHex(authTag.buffer)}`;
 };
 
-// ======================== DECRYPT ========================
 
 export const decryptPrivateKey = async (encryptedData: string): Promise<string> => {
   const parts = encryptedData.split(":");

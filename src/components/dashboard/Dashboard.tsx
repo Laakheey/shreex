@@ -1,6 +1,5 @@
 import React, { useState, Suspense, lazy } from "react";
 import BalanceCard from "./BalanceCard";
-import { UserProfileSync } from "..";
 import MonthlyPlanCard from "./MonthlyPlanCard";
 import HalfYearPlanCard from "./HalfYearPlanCard";
 import YearlyPlanCard from "./FixedPlanCard";
@@ -11,10 +10,12 @@ import BuyTokensCardTest from "./BuyTokenCardWithWebhook";
 import CashOutCardTest from "./CashOutCardTest";
 import ReferralRules from "./ReferralRules";
 import GrowthPage from "../supportAndGrowth/GrowthPage";
+import { useUserDetail } from "../../hooks/useUserDetails";
+import { useUser } from "@clerk/clerk-react";
 
 const ROIPage = lazy(() => import("../../components/userRoi/ROI"));
 const SupportPage = lazy(
-  () => import("../supportAndGrowth/SupportAndGrowthHome")
+  () => import("../supportAndGrowth/SupportAndGrowthHome"),
 );
 
 const TabLoader = () => (
@@ -34,13 +35,16 @@ const Dashboard: React.FC = () => {
     mutate: mutateInvestments,
   } = useFetchInvestments();
 
+  const { user: clerkUser } = useUser();
+
+  const { user } = useUserDetail(clerkUser?.id || "");
+
   const handleRefresh = async () => {
     await Promise.all([mutateBalance(), mutateInvestments()]);
   };
 
   return (
     <>
-      <UserProfileSync />
       <div className="min-h-screen bg-gray-50 py-12 px-4">
         <div className="container mx-auto max-w-7xl">
           <div className="mb-10">
@@ -61,8 +65,8 @@ const Dashboard: React.FC = () => {
                 {tab === "invest"
                   ? "Investments"
                   : tab === "roi"
-                  ? "ROI Portfolio"
-                  : "Support"}
+                    ? "ROI Portfolio"
+                    : "Support"}
               </button>
             ))}
           </div>
@@ -114,6 +118,7 @@ const Dashboard: React.FC = () => {
                   investments={investments}
                   loading={investmentsLoading}
                   onWithdrawSuccess={handleRefresh}
+                  isUserLeader={user?.is_leader || false}
                 />
               </div>
             )}

@@ -114,11 +114,15 @@
 // AdminPanel.tsx
 import React, { useState, Suspense } from "react";
 import { Users, CreditCard, MessageSquare, BarChart3 } from "lucide-react";
-import UsersManagement from "./adminFromHook/UsersManagement";
+// import UsersManagement from "./adminFromHook/UsersManagement";
+// import UserWithdrawal from "./adminFromHook/UserWithdrawal";
+// import SupportDashboard from "./SupportDashboard";
+// import AdminStats from "./adminFromHook/AdminStats"; 
+import { Toaster } from "react-hot-toast";
+import UsersManagement from "./UsersManagement";
 import UserWithdrawal from "./adminFromHook/UserWithdrawal";
 import SupportDashboard from "./SupportDashboard";
-import AdminStats from "./adminFromHook/AdminStats"; 
-import { Toaster } from "react-hot-toast";
+import AdminStats from "./AdminStats";
 
 const AdminPanel: React.FC = () => {
   const [activeTab, setActiveTab] = useState<"stats" | "users" | "withdrawals" | "chat">("stats");

@@ -8,7 +8,6 @@ import InvestmentPlans from "./InvestmentPlans";
 import AboutUs from "./AboutUs";
 import Dashboard from "./dashboard/Dashboard";
 import Loading from "./Loading";
-import UserProfileSync from "./UserProfileSync";
 import AdminPanel from "../admin/AdminPanel";
 import AdminChatWidget from "./AdminChatWidget";
 import ProductDemo from "./ProductDemo";
@@ -25,7 +24,6 @@ export {
     AboutUs,
     Dashboard,
     Loading,
-    UserProfileSync,
     AdminPanel,
     AdminChatWidget,
     ProductDemo,

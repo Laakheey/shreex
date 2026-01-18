@@ -337,7 +337,6 @@
 //   };
 // };
 
-
 import { useState, useEffect } from "react";
 import { useAuth } from "@clerk/clerk-react";
 import toast from "react-hot-toast";
@@ -354,6 +353,7 @@ interface User {
   created_at?: string;
   is_admin: boolean;
   is_active: boolean;
+  is_leader: boolean;
 }
 
 export const useAdminPanel = () => {
@@ -368,14 +368,22 @@ export const useAdminPanel = () => {
 
   const fetchUsers = async (page: number) => {
     console.log("🔍 fetchUsers called for page:", page);
-    console.log("🔐 Auth state - isLoaded:", isLoaded, "isSignedIn:", isSignedIn);
-    
+    console.log(
+      "🔐 Auth state - isLoaded:",
+      isLoaded,
+      "isSignedIn:",
+      isSignedIn,
+    );
+
     setLoading(true);
 
     try {
       console.log("📞 Getting token from Clerk...");
       const token = await getToken();
-      console.log("🎫 Token received:", token ? "YES (length: " + token.length + ")" : "NO");
+      console.log(
+        "🎫 Token received:",
+        token ? "YES (length: " + token.length + ")" : "NO",
+      );
 
       if (!token) {
         console.error("❌ No token available");
@@ -394,16 +402,16 @@ export const useAdminPanel = () => {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
-        credentials: "include", // Added for CORS with credentials
+        credentials: "include",
       });
 
-      console.log("📡 Response status:", response.status);
-      console.log("📡 Response ok:", response.ok);
-      console.log("📡 Response headers:", Object.fromEntries(response.headers.entries()));
-
       if (!response.ok) {
-        console.error("❌ Response not OK:", response.status, response.statusText);
-        
+        console.error(
+          "❌ Response not OK:",
+          response.status,
+          response.statusText,
+        );
+
         if (response.status === 403) {
           toast.error("Admin access required");
         } else if (response.status === 401) {
@@ -428,12 +436,14 @@ export const useAdminPanel = () => {
       setUsers(usersWithParsedBalance);
       setTotalUsers(data.totalUsers || 0);
       setTotalPages(data.totalPages || 0);
-      
-      console.log("✅ State updated - users count:", usersWithParsedBalance.length);
+
+      console.log(
+        "✅ State updated - users count:",
+        usersWithParsedBalance.length,
+      );
     } catch (error) {
       console.error("❌ Error fetching users:", error);
-      
-      // More detailed error logging
+
       if (error instanceof TypeError && error.message.includes("fetch")) {
         console.error("❌ Network error - possibly CORS or server down");
         toast.error("Network error - check connection");
@@ -449,7 +459,7 @@ export const useAdminPanel = () => {
   useEffect(() => {
     console.log("🎬 useEffect triggered - currentPage:", currentPage);
     console.log("🔐 Auth loaded:", isLoaded, "Signed in:", isSignedIn);
-    
+
     // Only fetch if auth is loaded and user is signed in
     if (isLoaded && isSignedIn) {
       fetchUsers(currentPage);
@@ -461,7 +471,7 @@ export const useAdminPanel = () => {
 
   const handleUpdateBalance = async (userId: string) => {
     console.log("💰 Updating balance for user:", userId, "to:", editAmount);
-    
+
     const amount = parseFloat(editAmount);
     if (isNaN(amount) || amount < 0) {
       toast.error("Enter a valid positive number");
@@ -511,7 +521,9 @@ export const useAdminPanel = () => {
       toast.success(`Balance updated! (${diffText} tokens)`);
 
       setUsers((prev) =>
-        prev.map((u) => (u.id === userId ? { ...u, token_balance: amount } : u))
+        prev.map((u) =>
+          u.id === userId ? { ...u, token_balance: amount } : u,
+        ),
       );
       setEditingId(null);
       setEditAmount("");
@@ -531,10 +543,10 @@ export const useAdminPanel = () => {
 
   const toggleUserStatus = async (userId: string, currentStatus: boolean) => {
     console.log("🔄 Toggling status for user:", userId, "from:", currentStatus);
-    
+
     try {
       const token = await getToken();
-      
+
       if (!token) {
         console.error("❌ No token for status toggle");
         toast.error("Not authenticated");
@@ -551,7 +563,7 @@ export const useAdminPanel = () => {
           },
           credentials: "include",
           body: JSON.stringify({ isActive: !currentStatus }),
-        }
+        },
       );
 
       console.log("📡 Status toggle response:", response.status);
@@ -559,8 +571,8 @@ export const useAdminPanel = () => {
       if (response.ok) {
         setUsers((prev) =>
           prev.map((u) =>
-            u.id === userId ? { ...u, is_active: !currentStatus } : u
-          )
+            u.id === userId ? { ...u, is_active: !currentStatus } : u,
+          ),
         );
         toast.success(currentStatus ? "User suspended" : "User activated");
       } else {
@@ -576,17 +588,17 @@ export const useAdminPanel = () => {
 
   const handleSearch = async (query: string) => {
     console.log("🔍 Search initiated with query:", query);
-    
+
     if (!query) {
       console.log("📝 Empty query, fetching page 1");
       fetchUsers(1);
       return;
     }
-    
+
     setLoading(true);
     try {
       const token = await getToken();
-      
+
       if (!token) {
         console.error("❌ No token for search");
         toast.error("Not authenticated");
@@ -598,7 +610,7 @@ export const useAdminPanel = () => {
       console.log("🌐 Searching at:", url);
 
       const response = await fetch(url, {
-        headers: { 
+        headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
@@ -609,12 +621,94 @@ export const useAdminPanel = () => {
 
       const data = await response.json();
       console.log("✅ Search results:", data);
-      
+
       setUsers(data.users || []);
       setTotalPages(1);
     } catch (error) {
       console.error("❌ Search error:", error);
       toast.error("Search failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const updateUserLeaderStatus = async (
+    userId: string,
+    currentLeaderStatus: boolean,
+  ) => {
+    const newStatus = !currentLeaderStatus;
+    try {
+      const token = await getToken();
+
+      if (!token) {
+        console.error("❌ No token for status toggle");
+        toast.error("Not authenticated");
+        return;
+      }
+
+      const response = await fetch(
+        `${API_BASE_URL}/api/admin/users/${userId}/updateUserLeaderStatus`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({ is_leader: newStatus }),
+        },
+      );
+
+      console.log("📡 Status toggle response:", response.status);
+
+      if (response.ok) {
+        setUsers((prev) =>
+          prev.map((u) =>
+            u.id === userId ? { ...u, is_leader: newStatus } : u,
+          ),
+        );
+        toast.success(
+          newStatus ? "User is now a leader" : "User is no longer a leader",
+        );
+      } else {
+        const error = await response.json().catch(() => ({}));
+        console.error("❌ Status toggle failed:", error);
+        toast.error(error.error || "Failed to update status");
+      }
+    } catch (error) {
+      console.error("❌ Error toggling status:", error);
+      toast.error("Failed to update status");
+    }
+  };
+
+  const getAdminStats = async () => {
+    try {
+      const token = await getToken();
+
+      if (!token) {
+        console.error("❌ No token for status toggle");
+        toast.error("Not authenticated");
+        return;
+      }
+
+      const response = await fetch(`${API_BASE_URL}/api/admin/earning/stats`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        console.log(errorData);
+        toast.error(errorData.error || "Failed to fetch admin stats");
+      }
+      const data = await response.json();
+      return data;
+    } catch (err: any) {
+      return null;
     } finally {
       setLoading(false);
     }
@@ -633,6 +727,8 @@ export const useAdminPanel = () => {
     handleUpdateBalance,
     handlePageChange,
     toggleUserStatus,
-    handleSearch
+    handleSearch,
+    updateUserLeaderStatus,
+    getAdminStats
   };
 };

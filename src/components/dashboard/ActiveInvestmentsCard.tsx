@@ -11,16 +11,25 @@ interface ActiveInvestmentsCardProps {
   investments: any[];
   loading: boolean;
   onWithdrawSuccess: () => Promise<void>;
+  isUserLeader: boolean;
 }
 
 const ActiveInvestmentsCard: React.FC<ActiveInvestmentsCardProps> = ({
   investments,
   loading,
   onWithdrawSuccess,
+  isUserLeader
 }) => {
   const [showWithdrawModal, setShowWithdrawModal] = useState(false);
   const [selectedInvestment, setSelectedInvestment] = useState<any>(null);
   const [withdrawAmount, setWithdrawAmount] = useState("");
+
+  const getTotalTokens = (investment: any) => {
+    const token = Number(investment.amount_tokens);
+    const bonus = isUserLeader ? Number(investment.initial_amount) : 0;
+    const total = token + bonus;
+    return total.toLocaleString();
+  };
 
   const { executeWithdrawal, loading: withdrawing } = useWithdrawal(onWithdrawSuccess);
 
@@ -126,7 +135,7 @@ const ActiveInvestmentsCard: React.FC<ActiveInvestmentsCardProps> = ({
                 <div className="mb-4">
                   <p className="text-gray-500 text-xs mb-1">{plan.sub}</p>
                   <p className="text-3xl font-black text-gray-900">
-                    {Number(investment.amount_tokens).toLocaleString()}
+                    {getTotalTokens(investment)}
                     <span className="text-xs text-gray-400 ml-2 font-medium">USDT</span>
                   </p>
                 </div>

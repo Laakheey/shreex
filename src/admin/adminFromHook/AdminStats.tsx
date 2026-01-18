@@ -1,8 +1,10 @@
 // components/admin/AdminStats.tsx
 
-import React from "react";
+import { useEffect, useState } from "react";
 import { TrendingUp, Calendar, DollarSign } from "lucide-react";
 import { useAdmin } from "../../hooks/useAdmin";
+import { Loading } from "../../components";
+import { useAdminPanel } from "../../hooks/useAdminPanel";
 
 const StatCard = ({ title, total, m, h, y, icon: Icon, colorClass }: any) => (
   <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
@@ -42,26 +44,27 @@ const StatCard = ({ title, total, m, h, y, icon: Icon, colorClass }: any) => (
 
 const AdminStats: React.FC = () => {
   const { getAdminStats, loading, error } = useAdmin();
+  const { getAdminStats: adminStats } = useAdminPanel();
 
-  const [stats, setStats] = React.useState<any>(null);
+  const [stats, setStats] = useState<any>(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const loadStats = async () => {
       const data = await getAdminStats();
+      const adminData = await adminStats();
       if (data) {
         setStats(data);
+      }
+      if (adminData) {
+        setStats(adminData);
       }
     };
 
     loadStats();
-  }, [getAdminStats]);
+  }, [getAdminStats, adminStats]);
 
   if (loading) {
-    return (
-      <div className="p-20 text-center animate-pulse text-gray-400 text-lg">
-        Loading Financials...
-      </div>
-    );
+    return <Loading />;
   }
 
   if (error || !stats) {

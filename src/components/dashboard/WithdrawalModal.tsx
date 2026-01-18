@@ -34,6 +34,8 @@ const WithdrawalModal: React.FC<WithdrawalModalProps> = ({
           </p>
           <p className="text-3xl font-black text-indigo-600">
             {investment.amount_tokens.toLocaleString()} <span className="text-sm text-gray-400">Tokens</span>
+            <br />
+            <span className="text-sm text-red-400">Note: Bonus amount is not included.</span>
           </p>
         </div>
 
