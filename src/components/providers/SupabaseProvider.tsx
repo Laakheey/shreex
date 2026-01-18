@@ -70,11 +70,11 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { createClient } from "@supabase/supabase-js";
 import { useAuth } from "@clerk/clerk-react";
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL_DEV;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY_DEV;
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 // Add this - service role key for local dev
-const supabaseServiceRoleKey = import.meta.env.VITE_SUPABASE_SERVICE_ROLE_KEY_DEV;
+const supabaseServiceRoleKey = import.meta.env.VITE_SUPABASE_SERVICE_ROLE_KEY;
 const isDev = import.meta.env.DEV;
 
 const SupabaseContext = createContext<any>(null);
