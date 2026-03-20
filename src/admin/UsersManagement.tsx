@@ -236,9 +236,10 @@
 
 // export default UsersManagement;
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useAdminPanel } from "../hooks/useAdminPanel";
 import UserTransactionHistoryModal from "../components/UserTransactionHistoryModal";
+import { User as UserType } from "../interfaces/types";
 import {
   Search,
   Gavel,
@@ -269,8 +270,30 @@ const UsersManagement = () => {
     updateUserLeaderStatus,
   } = useAdminPanel();
 
-  const [selectedUser, setSelectedUser] = useState<any>(null);
+  const [selectedUser, setSelectedUser] = useState<UserType | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+
+  // Memoize event handlers to prevent unnecessary re-renders
+  const handleSearchClick = useCallback(() => {
+    handleSearch(searchQuery);
+  }, [searchQuery, handleSearch]);
+
+  const handleUserSelect = useCallback((user: UserType) => {
+    setSelectedUser(user);
+  }, []);
+
+  const handleCloseModal = useCallback(() => {
+    setSelectedUser(null);
+  }, []);
+
+  const handleToggleStatus = useCallback((userId: string, isActive: boolean) => {
+    const confirmMsg = !isActive
+      ? "Are you sure you want to unban this user?"
+      : "Ban this user? They will lose all access immediately.";
+    if (window.confirm(confirmMsg)) {
+      toggleUserStatus(userId, isActive);
+    }
+  }, [toggleUserStatus]);
 
   if (loading)
     return (
@@ -301,7 +324,7 @@ const UsersManagement = () => {
           />
           <Search className="absolute left-4 top-3.5 text-gray-400" size={20} />
           <button
-            onClick={() => handleSearch(searchQuery)}
+            onClick={handleSearchClick}
             className="absolute right-2 top-2 bg-gray-900 text-white px-4 py-1.5 rounded-lg text-sm font-medium hover:bg-black transition-colors"
           >
             Search
@@ -421,7 +444,7 @@ const UsersManagement = () => {
                         </button>
 
                         <button
-                          onClick={() => setSelectedUser(u)}
+                          onClick={() => handleUserSelect(u)}
                           className="flex items-center gap-1.5 text-purple-600 hover:text-purple-800 text-xs md:text-sm font-semibold transition-colors cursor-pointer"
                         >
                           <History size={16} />
@@ -429,15 +452,7 @@ const UsersManagement = () => {
                         </button>
 
                         <button
-                          onClick={() => {
-                            const confirmMsg =
-                              u.is_active === false
-                                ? "Are you sure you want to unban this user?"
-                                : "Ban this user? They will lose all access immediately.";
-                            if (window.confirm(confirmMsg)) {
-                              toggleUserStatus(u.id, u.is_active ?? true);
-                            }
-                          }}
+                          onClick={() => handleToggleStatus(u.id, u.is_active ?? true)}
                           className={`flex items-center gap-1.5 text-xs md:text-sm font-semibold transition-colors cursor-pointer ${
                             u.is_active === false
                               ? "text-green-600 hover:text-green-800"
@@ -513,7 +528,7 @@ const UsersManagement = () => {
 
       <UserTransactionHistoryModal
         user={selectedUser}
-        onClose={() => setSelectedUser(null)}
+        onClose={handleCloseModal}
       />
     </div>
   );

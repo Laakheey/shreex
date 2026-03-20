@@ -1,9 +1,22 @@
 // components/admin/AdminStats.tsx
-import React from "react";
-import { TrendingUp, Calendar, DollarSign } from "lucide-react";
+import React, { memo } from "react";
+import { TrendingUp, Calendar, DollarSign, LucideIcon } from "lucide-react";
 import { useAdminStats } from "../hooks/useAdminStats";
 
-const StatCard = ({ title, total, m, h, y, icon: Icon, colorClass }: any) => (
+interface StatCardProps {
+  title: string;
+  total: number;
+  m: number;
+  h: number;
+  y: number;
+  icon: LucideIcon;
+  colorClass: {
+    bg: string;
+    text: string;
+  };
+}
+
+const StatCard: React.FC<StatCardProps> = memo(({ title, total, m, h, y, icon: Icon, colorClass }) => (
   <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm">
     <div className="flex items-center gap-4 mb-4">
       <div className={`p-3 rounded-2xl ${colorClass.bg} ${colorClass.text}`}>
@@ -31,7 +44,7 @@ const StatCard = ({ title, total, m, h, y, icon: Icon, colorClass }: any) => (
       </div>
     </div>
   </div>
-);
+));
 
 const AdminStats: React.FC = () => {
   const { stats, loading, error } = useAdminStats();

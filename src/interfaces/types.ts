@@ -1,3 +1,42 @@
+// Admin & User Management Types
+export interface User {
+  id: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  token_balance: number;
+  is_active: boolean;
+  is_leader?: boolean;
+}
+
+export interface WithdrawalRequest {
+  id: string;
+  user_id: string;
+  amount: number;
+  status: 'pending' | 'approved' | 'rejected' | 'completed';
+  wallet_address: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface AdminStats {
+  total_revenue: number;
+  monthly_revenue: number;
+  half_yearly_revenue: number;
+  yearly_revenue: number;
+  total_users: number;
+  active_investments: number;
+  pending_withdrawals: number;
+}
+
+export interface Wallet {
+  id: string;
+  address: string;
+  network: string;
+  balance: number;
+}
+
+// Stock Data Types
 type StockDataPoint = {
   date: string;
   open?: number;

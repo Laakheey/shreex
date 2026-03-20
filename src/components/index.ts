@@ -1,6 +1,5 @@
 import Navbar from "./Navbar";
 import Home from "./Home";
-import { StockCard } from "./StockDataFetch";
 import SignInPage from "./SignInPage";
 import SignUpPage from "./SignOutPage";
 import HeroSection from "./Hero";
@@ -10,13 +9,10 @@ import Dashboard from "./dashboard/Dashboard";
 import Loading from "./Loading";
 import AdminPanel from "../admin/AdminPanel";
 import AdminChatWidget from "./AdminChatWidget";
-import ProductDemo from "./ProductDemo";
-import CheckActiveStatus from "./CheckActive";
 
 export {
     Navbar,
     Home,
-    StockCard,
     SignInPage,
     SignUpPage,
     HeroSection,
@@ -26,7 +22,5 @@ export {
     Loading,
     AdminPanel,
     AdminChatWidget,
-    ProductDemo,
-    CheckActiveStatus
 }
 
