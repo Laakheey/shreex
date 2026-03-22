@@ -1,9 +1,11 @@
-// utils/referralTracker.ts
-import { useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+// utils/referralTracker.tsx
+'use client';
 
-export function ReferralTracker() {
-  const [searchParams] = useSearchParams();
+import { useEffect } from "react";
+import { useSearchParams } from "next/navigation";
+
+export default function ReferralTracker() {
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     const refCode = searchParams.get("ref");

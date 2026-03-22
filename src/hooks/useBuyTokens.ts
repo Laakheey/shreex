@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useUser } from '@clerk/clerk-react';
+import { useUser } from '@clerk/nextjs';
 import { useSupabase } from '../components/providers/SupabaseProvider';
 
 export function useBuyTokens() {

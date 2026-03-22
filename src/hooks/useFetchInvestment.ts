@@ -1,7 +1,7 @@
 // src/hooks/useFetchInvestments.ts
 import { useState, useEffect, useCallback } from 'react';
 import { useSupabase } from '../components/providers/SupabaseProvider';
-import { useUser } from '@clerk/clerk-react';
+import { useUser } from '@clerk/nextjs';
 import toast from 'react-hot-toast';
 
 export function useFetchInvestments() {

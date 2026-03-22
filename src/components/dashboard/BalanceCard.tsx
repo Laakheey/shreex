@@ -1,4 +1,6 @@
-import { useUser } from "@clerk/clerk-react";
+'use client';
+
+import { useUser } from "@clerk/nextjs";
 import { AlertTriangle } from "lucide-react"; // Add this import
 import Loading from "../Loading";
 

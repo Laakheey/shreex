@@ -1,9 +1,6 @@
 import Navbar from "./Navbar";
-import Home from "./Home";
 import { StockCard } from "./StockDataFetch";
-import SignInPage from "./SignInPage";
-import SignUpPage from "./SignOutPage";
-import HeroSection from "./Hero";
+import Hero from "./Hero";
 import InvestmentPlans from "./InvestmentPlans";
 import AboutUs from "./AboutUs";
 import Dashboard from "./dashboard/Dashboard";
@@ -15,11 +12,8 @@ import CheckActiveStatus from "./CheckActive";
 
 export {
     Navbar,
-    Home,
     StockCard,
-    SignInPage,
-    SignUpPage,
-    HeroSection,
+    Hero,
     InvestmentPlans,
     AboutUs,
     Dashboard,

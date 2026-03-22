@@ -1,6 +1,6 @@
 // hooks/useCashOut.ts
 import { useState } from "react";
-import { useAuth } from "@clerk/clerk-react";
+import { useAuth } from "@clerk/nextjs";
 import toast from "react-hot-toast";
 
 const API_URL = import.meta.env.VITE_API_URL;

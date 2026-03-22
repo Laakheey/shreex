@@ -1,7 +1,9 @@
-import { useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+'use client';
 
-const HeroSection: React.FC = () => {
+import { useEffect, useRef } from "react";
+import Link from "next/link";
+
+const Hero: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   useEffect(() => {
     if (videoRef.current) {
@@ -49,14 +51,14 @@ const HeroSection: React.FC = () => {
 
             <div className="flex flex-wrap gap-4">
               <Link
-                to="/sign-up"
+                href="/sign-up"
                 className="px-8 py-4 bg-white text-indigo-950 font-bold rounded-full shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:bg-yellow-300 transition-all transform hover:-translate-y-1"
               >
                 Get Started Now
               </Link>
 
               <Link
-                to="/sign-in"
+                href="/sign-in"
                 className="px-8 py-4 bg-transparent border border-slate-500 font-semibold rounded-full hover:bg-white/10 transition-all"
               >
                 Sign In
@@ -137,4 +139,4 @@ const HeroSection: React.FC = () => {
   );
 };
 
-export default HeroSection;
+export default Hero;

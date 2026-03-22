@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useUser } from '@clerk/clerk-react';
+import { useUser } from '@clerk/nextjs';
 import toast from 'react-hot-toast';
 import { useSupabase } from '../components/providers/SupabaseProvider';
 

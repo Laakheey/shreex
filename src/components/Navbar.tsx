@@ -1,5 +1,7 @@
+'use client';
+
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { Menu, X, LayoutDashboard, ShieldCheck } from "lucide-react";
 import {
   SignedIn,
@@ -8,7 +10,7 @@ import {
   SignUpButton,
   UserButton,
   useUser,
-} from "@clerk/clerk-react";
+} from "@clerk/nextjs";
 import { useSupabase } from "./providers/SupabaseProvider";
 
 const Navbar: React.FC = () => {
@@ -45,7 +47,7 @@ const Navbar: React.FC = () => {
         <div className="flex justify-between items-center">
           <div className="flex items-center">
             <Link
-              to="/"
+              href="/"
               onClick={closeMobileMenu}
               className="shrink-0 flex items-center py-1"
             >
@@ -57,7 +59,7 @@ const Navbar: React.FC = () => {
             <SignedIn>
               {isAdmin && (
                 <Link
-                  to="/admin/adminPanel"
+                  href="/admin"
                   className="text-red-600 hover:bg-red-50 px-3 py-2 rounded-md font-bold transition flex items-center space-x-2 border border-red-200"
                 >
                   <ShieldCheck className="h-5 w-5" />
@@ -65,7 +67,7 @@ const Navbar: React.FC = () => {
                 </Link>
               )}
               <Link
-                to="/dashboard"
+                href="/dashboard"
                 className="text-gray-700 hover:text-indigo-600 font-medium transition flex items-center space-x-2"
               >
                 <LayoutDashboard className="h-5 w-5" />
@@ -133,7 +135,7 @@ const Navbar: React.FC = () => {
 
               {isAdmin && (
                 <Link
-                  to="/admin/adminPanel"
+                  href="/admin"
                   onClick={closeMobileMenu}
                   className="flex items-center w-full p-4 bg-red-50 text-red-700 rounded-lg font-bold hover:bg-red-100 transition border border-red-100"
                 >
@@ -143,7 +145,7 @@ const Navbar: React.FC = () => {
               )}
 
               <Link
-                to="/dashboard"
+                href="/dashboard"
                 onClick={closeMobileMenu}
                 className="flex items-center w-full p-4 bg-indigo-50 text-indigo-700 rounded-lg font-medium hover:bg-indigo-100 transition"
               >

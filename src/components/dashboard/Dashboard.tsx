@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState, Suspense, lazy } from "react";
 import BalanceCard from "./BalanceCard";
 import MonthlyPlanCard from "./MonthlyPlanCard";

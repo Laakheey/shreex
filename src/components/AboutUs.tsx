@@ -1,6 +1,8 @@
+'use client';
+
 import React from "react";
 import { Shield, Users, TrendingUp, Zap, Globe, Lock } from "lucide-react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import image from '/assets/financial growth.jpg'
 
 const AboutUs: React.FC = () => {
@@ -179,7 +181,7 @@ const AboutUs: React.FC = () => {
 
           <div className="flex flex-col sm:flex-row gap-6 justify-center">
             <Link
-              to="/sign-up"
+              href="/sign-up"
               className="px-10 py-5 bg-white text-indigo-700 font-bold text-xl rounded-xl shadow-xl hover:bg-gray-100 transition transform hover:scale-105"
             >
               Start Investing Today

@@ -1,4 +1,5 @@
 // components/CashOutCard.tsx
+'use client';
 import React from "react";
 import { useCashOut } from "../../hooks/useCashOut";
 

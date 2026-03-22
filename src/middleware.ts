@@ -1,0 +1,37 @@
+import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
+
+// Protected routes that require authentication
+const isProtectedRoute = createRouteMatcher([
+  '/dashboard(.*)',
+  '/admin(.*)',
+  '/profile(.*)',
+  '/settings(.*)',
+]);
+
+// Admin-only routes
+const isAdminRoute = createRouteMatcher([
+  '/admin(.*)',
+]);
+
+export default clerkMiddleware(async (auth, req) => {
+  // Protect routes that require authentication
+  if (isProtectedRoute(req)) {
+    await auth.protect();
+  }
+
+  // Protect admin routes with admin check
+  if (isAdminRoute(req)) {
+    // Admin check will be done in the component using the database
+    // Since middleware can't access Supabase easily, we'll handle this in the route
+    await auth.protect();
+  }
+});
+
+export const config = {
+  matcher: [
+    // Skip Next.js internals and all static files, unless found in search params
+    '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
+    // Always run for API routes
+    '/(api|trpc)(.*)',
+  ],
+};
